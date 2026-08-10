@@ -1,0 +1,20 @@
+{
+  "name": "rice-mill-billing-server",
+  "version": "1.0.0",
+  "description": "Express.js REST API server with MongoDB for Rice Mill Billing System",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
