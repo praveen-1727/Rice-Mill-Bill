@@ -520,82 +520,88 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
         {/* Section 1 Items List */}
         <div className="space-y-3">
           {section1Items.map((item) => (
-            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+              {/* Item Name & Delete Button */}
               <div className="flex items-center justify-between gap-2">
                 <input
                   type="text"
                   value={item.name}
                   onChange={(e) => handleSection1ItemChange(item.id, 'name', e.target.value)}
-                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 focus:bg-white"
+                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 min-w-0 focus:bg-white"
                 />
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-500">చార్జ్:</span>
+                <button
+                  onClick={() => handleRemoveSection1Item(item.id)}
+                  className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-100 rounded-xl transition-colors shrink-0"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+
+              {/* Formula & Charge Row */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-200/80">
+                {/* Formula inputs */}
+                <div className="text-xs font-bold text-slate-700">
+                  {item.name === 'బియ్యం' ? (
+                    <div className="flex items-center gap-1 flex-wrap">
+                      <input
+                        type="number"
+                        value={item.bags || ''}
+                        onChange={(e) => handleSection1ItemChange(item.id, 'bags', parseFloat(e.target.value) || 0)}
+                        className="w-12 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                        placeholder="25"
+                      />
+                      <span className="text-[11px]">kg ×</span>
+                      <input
+                        type="number"
+                        value={item.multiplier || ''}
+                        onChange={(e) => handleSection1ItemChange(item.id, 'multiplier', parseFloat(e.target.value) || 0)}
+                        className="w-12 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                        placeholder="6"
+                      />
+                      <span className="text-[11px]">kg +</span>
+                      <input
+                        type="number"
+                        value={item.extraKg || ''}
+                        onChange={(e) => handleSection1ItemChange(item.id, 'extraKg', parseFloat(e.target.value) || 0)}
+                        className="w-12 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                        placeholder="9"
+                      />
+                      <span className="text-[11px]">kg =</span>
+                      <span className="font-black text-amber-900 bg-amber-100 px-2 py-0.5 rounded-lg text-xs border border-amber-300">
+                        {item.quantity} kg
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 flex-wrap text-xs">
+                      <span>పరిమాణం:</span>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) => handleSection1ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                        className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                      />
+                      <span>రేటు: ₹</span>
+                      <input
+                        type="number"
+                        value={item.rate}
+                        onChange={(e) => handleSection1ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                        className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                      />
+                      <span className="text-slate-500 text-[10px]">({item.calculationText})</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Charge Input */}
+                <div className="flex items-center justify-end gap-1.5 self-end sm:self-auto pt-1 sm:pt-0">
+                  <span className="text-xs font-black text-slate-600">చార్జ్: ₹</span>
                   <input
                     type="number"
                     value={item.amount}
                     onChange={(e) => handleSection1ItemChange(item.id, 'amount', parseFloat(e.target.value) || 0)}
-                    className="w-24 bg-white border border-slate-300 rounded-xl p-1.5 text-right font-black text-slate-950 text-sm focus:bg-white"
+                    className="w-20 bg-white border border-slate-300 rounded-xl p-1.5 text-right font-black text-slate-950 text-sm focus:bg-white"
                   />
-                  <button
-                    onClick={() => handleRemoveSection1Item(item.id)}
-                    className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-100 rounded-lg transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
                 </div>
-              </div>
-
-              {/* Formula inputs */}
-              <div className="pt-1 text-xs font-bold text-slate-700">
-                {item.name === 'బియ్యం' ? (
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <input
-                      type="number"
-                      value={item.bags || ''}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'bags', parseFloat(e.target.value) || 0)}
-                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                      placeholder="25"
-                    />
-                    <span>kg ×</span>
-                    <input
-                      type="number"
-                      value={item.multiplier || ''}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'multiplier', parseFloat(e.target.value) || 0)}
-                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                      placeholder="6"
-                    />
-                    <span>kg +</span>
-                    <input
-                      type="number"
-                      value={item.extraKg || ''}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'extraKg', parseFloat(e.target.value) || 0)}
-                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                      placeholder="9"
-                    />
-                    <span>kg =</span>
-                    <span className="font-black text-amber-900 bg-amber-100 px-2 py-1 rounded-lg text-xs border border-amber-300">
-                      {item.quantity} kg
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span>పరిమాణం:</span>
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                      className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                    />
-                    <span>రేటు: ₹</span>
-                    <input
-                      type="number"
-                      value={item.rate}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                      className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                    />
-                    <span className="text-slate-500 font-mono text-[11px]">({item.calculationText})</span>
-                  </div>
-                )}
               </div>
             </div>
           ))}
@@ -603,7 +609,7 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
 
         {/* Section 1 Total */}
         <div className="flex justify-between items-center pt-3 border-t border-slate-200 bg-amber-500/10 p-4 rounded-2xl border border-amber-200">
-          <span className="font-extrabold text-amber-950 text-sm sm:text-base">మొదటి భాగం మొత్తం (Section 1 Total):</span>
+          <span className="font-extrabold text-amber-950 text-xs sm:text-base">మొదటి భాగం మొత్తం (Section 1 Total):</span>
           <span className="text-xl sm:text-2xl font-black text-amber-900">₹{section1Total}</span>
         </div>
       </div>
@@ -632,15 +638,16 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
         {/* Section 2 Items List */}
         <div className="space-y-3">
           {section2Items.map((item) => (
-            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+              {/* Item Name & Delete Button */}
               <div className="flex items-center justify-between gap-2">
                 <input
                   type="text"
                   value={item.name}
                   onChange={(e) => handleSection2ItemChange(item.id, 'name', e.target.value)}
-                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 focus:bg-white"
+                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 min-w-0 focus:bg-white"
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <span className="font-black text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-xl text-sm border border-emerald-300">
                     ₹{item.amount}
                   </span>
@@ -653,23 +660,29 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 flex-wrap pt-1">
-                <span>పరిమాణం:</span>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => handleSection2ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                  className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                />
-                <span>× రేటు: ₹</span>
-                <input
-                  type="number"
-                  value={item.rate}
-                  onChange={(e) => handleSection2ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                  className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
-                />
-                <span>=</span>
-                <span className="font-bold text-slate-600">₹{item.amount}</span>
+              {/* Quantity & Rate Row */}
+              <div className="flex items-center justify-between gap-1.5 text-xs font-bold text-slate-700 pt-2 border-t border-slate-200/80 flex-wrap">
+                <div className="flex items-center gap-1">
+                  <span>పరిమాణం:</span>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => handleSection2ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                    className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                  />
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>× రేటు: ₹</span>
+                  <input
+                    type="number"
+                    value={item.rate}
+                    onChange={(e) => handleSection2ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                    className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                  />
+                </div>
+                <div className="font-extrabold text-emerald-700 text-xs">
+                  = ₹{item.amount}
+                </div>
               </div>
             </div>
           ))}
