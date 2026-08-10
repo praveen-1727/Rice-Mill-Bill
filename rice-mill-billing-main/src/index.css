@@ -14,20 +14,15 @@
   }
 }
 
-/* Custom Scrollbars */
+/* Hide All Scrollbars Globally for Clean Seamless UI */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
 }
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+* {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
 }
 
 /* THERMAL RECEIPT PRINT MEDIA STYLING */

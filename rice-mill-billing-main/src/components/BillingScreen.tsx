@@ -517,112 +517,94 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
           </button>
         </div>
 
-        {/* Section 1 Items Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[650px]">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 text-xs font-black uppercase tracking-wider border-b border-slate-200">
-                <th className="py-3 px-3 w-[25%]">వివరం (Item Name)</th>
-                <th className="py-3 px-2 w-[45%]">లెక్క సూత్రం (Formula)</th>
-                <th className="py-3 px-3 w-[20%] text-right">మొత్తం చార్జ్ (₹)</th>
-                <th className="py-3 px-2 w-[10%] text-center">చర్య</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
-              {section1Items.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                  {/* Name */}
-                  <td className="py-3 px-3">
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'name', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-black text-slate-950 focus:bg-white"
-                    />
-                  </td>
+        {/* Section 1 Items List */}
+        <div className="space-y-3">
+          {section1Items.map((item) => (
+            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <input
+                  type="text"
+                  value={item.name}
+                  onChange={(e) => handleSection1ItemChange(item.id, 'name', e.target.value)}
+                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 focus:bg-white"
+                />
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-500">చార్జ్:</span>
+                  <input
+                    type="number"
+                    value={item.amount}
+                    onChange={(e) => handleSection1ItemChange(item.id, 'amount', parseFloat(e.target.value) || 0)}
+                    className="w-24 bg-white border border-slate-300 rounded-xl p-1.5 text-right font-black text-slate-950 text-sm focus:bg-white"
+                  />
+                  <button
+                    onClick={() => handleRemoveSection1Item(item.id)}
+                    className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-100 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
 
-                  {/* Formula Controls */}
-                  <td className="py-3 px-2">
-                    {item.name === 'బియ్యం' ? (
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 flex-wrap">
-                        <input
-                          type="number"
-                          value={item.bags || ''}
-                          onChange={(e) => handleSection1ItemChange(item.id, 'bags', parseFloat(e.target.value) || 0)}
-                          className="w-16 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                          placeholder="25"
-                        />
-                        <span>kg ×</span>
-                        <input
-                          type="number"
-                          value={item.multiplier || ''}
-                          onChange={(e) => handleSection1ItemChange(item.id, 'multiplier', parseFloat(e.target.value) || 0)}
-                          className="w-16 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                          placeholder="6"
-                        />
-                        <span>kg +</span>
-                        <input
-                          type="number"
-                          value={item.extraKg || ''}
-                          onChange={(e) => handleSection1ItemChange(item.id, 'extraKg', parseFloat(e.target.value) || 0)}
-                          className="w-16 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                          placeholder="9"
-                        />
-                        <span>kg =</span>
-                        <span className="font-black text-amber-900 bg-amber-100 px-2.5 py-1.5 rounded-xl text-sm border border-amber-300">
-                          {item.quantity} kg
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-700 flex-wrap">
-                        <span>పరిమాణం:</span>
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          onChange={(e) => handleSection1ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                          className="w-20 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                        />
-                        <span>రేటు: ₹</span>
-                        <input
-                          type="number"
-                          value={item.rate}
-                          onChange={(e) => handleSection1ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                          className="w-20 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                        />
-                        <span className="text-slate-500 font-mono text-[11px]">({item.calculationText})</span>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Amount */}
-                  <td className="py-3 px-3 text-right">
+              {/* Formula inputs */}
+              <div className="pt-1 text-xs font-bold text-slate-700">
+                {item.name === 'బియ్యం' ? (
+                  <div className="flex items-center gap-1 flex-wrap">
                     <input
                       type="number"
-                      value={item.amount}
-                      onChange={(e) => handleSection1ItemChange(item.id, 'amount', parseFloat(e.target.value) || 0)}
-                      className="w-28 bg-slate-50 border border-slate-300 rounded-xl p-2 text-right font-black text-slate-950 focus:bg-white inline-block"
+                      value={item.bags || ''}
+                      onChange={(e) => handleSection1ItemChange(item.id, 'bags', parseFloat(e.target.value) || 0)}
+                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                      placeholder="25"
                     />
-                  </td>
-
-                  {/* Action */}
-                  <td className="py-3 px-2 text-center">
-                    <button
-                      onClick={() => handleRemoveSection1Item(item.id)}
-                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <span>kg ×</span>
+                    <input
+                      type="number"
+                      value={item.multiplier || ''}
+                      onChange={(e) => handleSection1ItemChange(item.id, 'multiplier', parseFloat(e.target.value) || 0)}
+                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                      placeholder="6"
+                    />
+                    <span>kg +</span>
+                    <input
+                      type="number"
+                      value={item.extraKg || ''}
+                      onChange={(e) => handleSection1ItemChange(item.id, 'extraKg', parseFloat(e.target.value) || 0)}
+                      className="w-14 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                      placeholder="9"
+                    />
+                    <span>kg =</span>
+                    <span className="font-black text-amber-900 bg-amber-100 px-2 py-1 rounded-lg text-xs border border-amber-300">
+                      {item.quantity} kg
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>పరిమాణం:</span>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleSection1ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                      className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                    />
+                    <span>రేటు: ₹</span>
+                    <input
+                      type="number"
+                      value={item.rate}
+                      onChange={(e) => handleSection1ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                      className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                    />
+                    <span className="text-slate-500 font-mono text-[11px]">({item.calculationText})</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Section 1 Total */}
         <div className="flex justify-between items-center pt-3 border-t border-slate-200 bg-amber-500/10 p-4 rounded-2xl border border-amber-200">
-          <span className="font-extrabold text-amber-950 text-base">మొదటి భాగం మొత్తం (Section 1 Total):</span>
-          <span className="text-2xl font-black text-amber-900">₹{section1Total}</span>
+          <span className="font-extrabold text-amber-950 text-sm sm:text-base">మొదటి భాగం మొత్తం (Section 1 Total):</span>
+          <span className="text-xl sm:text-2xl font-black text-amber-900">₹{section1Total}</span>
         </div>
       </div>
 
@@ -647,74 +629,56 @@ export const BillingScreen: React.FC<BillingScreenProps> = ({
           </button>
         </div>
 
-        {/* Section 2 Items Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[650px]">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 text-xs font-black uppercase tracking-wider border-b border-slate-200">
-                <th className="py-3 px-3 w-[25%]">అమ్మకం వివరం (Item Name)</th>
-                <th className="py-3 px-2 w-[45%]">పరిమాణం × రేటు (Quantity × Rate)</th>
-                <th className="py-3 px-3 w-[20%] text-right">మొత్తం విలువ (₹)</th>
-                <th className="py-3 px-2 w-[10%] text-center">చర్య</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
-              {section2Items.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="py-3 px-3">
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => handleSection2ItemChange(item.id, 'name', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-black text-slate-950 focus:bg-white"
-                    />
-                  </td>
+        {/* Section 2 Items List */}
+        <div className="space-y-3">
+          {section2Items.map((item) => (
+            <div key={item.id} className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <input
+                  type="text"
+                  value={item.name}
+                  onChange={(e) => handleSection2ItemChange(item.id, 'name', e.target.value)}
+                  className="bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-black text-slate-950 text-sm flex-1 focus:bg-white"
+                />
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-xl text-sm border border-emerald-300">
+                    ₹{item.amount}
+                  </span>
+                  <button
+                    onClick={() => handleRemoveSection2Item(item.id)}
+                    className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-100 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
 
-                  <td className="py-3 px-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-slate-700 flex-wrap">
-                      <span>పరిమాణం:</span>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) => handleSection2ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        className="w-20 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                      />
-                      <span>× రేటు: ₹</span>
-                      <input
-                        type="number"
-                        value={item.rate}
-                        onChange={(e) => handleSection2ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                        className="w-20 bg-white border border-slate-300 rounded-lg p-1.5 text-center font-black text-sm"
-                      />
-                      <span>=</span>
-                      <span className="font-black text-emerald-800 bg-emerald-100 px-2.5 py-1.5 rounded-xl text-sm border border-emerald-300">
-                        ₹{item.amount}
-                      </span>
-                    </div>
-                  </td>
-
-                  <td className="py-3 px-3 text-right">
-                    <span className="font-black text-slate-950 text-base">₹{item.amount}</span>
-                  </td>
-
-                  <td className="py-3 px-2 text-center">
-                    <button
-                      onClick={() => handleRemoveSection2Item(item.id)}
-                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 flex-wrap pt-1">
+                <span>పరిమాణం:</span>
+                <input
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) => handleSection2ItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                />
+                <span>× రేటు: ₹</span>
+                <input
+                  type="number"
+                  value={item.rate}
+                  onChange={(e) => handleSection2ItemChange(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-white border border-slate-300 rounded-lg p-1 text-center font-black text-xs"
+                />
+                <span>=</span>
+                <span className="font-bold text-slate-600">₹{item.amount}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Section 2 Total */}
         <div className="flex justify-between items-center pt-3 border-t border-slate-200 bg-emerald-500/10 p-4 rounded-2xl border border-emerald-200">
-          <span className="font-extrabold text-emerald-950 text-base">రెండవ భాగం మొత్తం (Section 2 Total):</span>
-          <span className="text-2xl font-black text-emerald-900">₹{section2Total}</span>
+          <span className="font-extrabold text-emerald-950 text-sm sm:text-base">రెండవ భాగం మొత్తం (Section 2 Total):</span>
+          <span className="text-xl sm:text-2xl font-black text-emerald-900">₹{section2Total}</span>
         </div>
       </div>
 
