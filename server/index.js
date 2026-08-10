@@ -40,13 +40,26 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/seed', seedRoutes);
 
-// Serve static frontend production build in single-service mode
-const frontendDistPath = path.resolve(__dirname, '../rice-mill-billing-main/dist');
-if (fs.existsSync(frontendDistPath)) {
+// Find frontend production dist directory across potential path locations
+const possibleDistPaths = [
+  path.resolve(__dirname, '../rice-mill-billing-main/dist'),
+  path.resolve(process.cwd(), 'rice-mill-billing-main/dist'),
+  path.resolve(__dirname, '../dist'),
+  path.resolve(process.cwd(), 'dist')
+];
+
+const frontendDistPath = possibleDistPaths.find(p => fs.existsSync(p));
+
+if (frontendDistPath) {
   console.log(`[Express Single-Service] Serving static frontend build from: ${frontendDistPath}`);
   app.use(express.static(frontendDistPath));
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+} else {
+  console.warn(`[Express Single-Service] Warning: Frontend build dist directory not found in:`, possibleDistPaths);
+  app.get('*', (req, res) => {
+    res.status(404).send('Rice Mill Billing Server is running. Frontend build (dist) not found. Please trigger build.');
   });
 }
 
