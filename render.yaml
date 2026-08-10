@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: rice-mill-billing
+    env: node
+    buildCommand: cd rice-mill-billing-main && npm install && npm run build
+    startCommand: node server/index.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false # Set your MongoDB Atlas connection string in Render Dashboard

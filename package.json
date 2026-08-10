@@ -1,0 +1,17 @@
+{
+  "name": "rice-mill-billing-monorepo",
+  "version": "1.0.0",
+  "description": "Unified MERN Stack Rice Mill Billing System",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "postinstall": "cd server && npm install && cd ../rice-mill-billing-main && npm install",
+    "build": "cd rice-mill-billing-main && npm run build",
+    "start": "node server/index.js",
+    "dev:server": "cd server && npm run dev",
+    "dev:frontend": "cd rice-mill-billing-main && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
